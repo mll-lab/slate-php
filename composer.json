@@ -2,7 +2,8 @@
     "name": "prezly/slate-php",
     "description": "PHP implementation of the Slate Rich Text Editor data model",
     "type": "library",
-    "license": "proprietary",
+    "description": "PHP implementation of the [Slate Rich Text Editor](https://slatejs.org) data model",
+    "license": "MIT",
     "authors": [
         {
             "name": "Victor Stanciu",
