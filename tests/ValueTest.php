@@ -5,12 +5,11 @@ namespace Prezly\Slate\Tests;
 class ValueTest extends TestCase
 {
     /**
-     * @test
      * @dataProvider fixtures
      *
      * @param string $file_path
      */
-    public function it_should_serialize_to_json(string $file_path)
+    public function test_serialize_to_json(string $file_path)
     {
         $json = $this->loadFixture($file_path);
         $value = $this->loadContentFromFixture($file_path);

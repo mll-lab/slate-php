@@ -19,7 +19,7 @@ class UnserializerTest extends TestCase
      * @see https://docs.slatejs.org/slate-core/value
      * @see https://docs.slatejs.org/slate-core/document
      */
-    public function test_should_expect_top_level_document()
+    public function test_expect_top_level_document()
     {
         $this->markTestSkipped('TODO add better validation errors');
         $this->expectException(InvalidArgumentException::class);
@@ -30,13 +30,13 @@ class UnserializerTest extends TestCase
      * Since the Slate model always has a top-level node (the Value), the result of unserialization
      * should always be a single Value instance
      */
-    public function test_should_return_document_node()
+    public function test_return_document_node()
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/empty_document.json');
         $this->assertEmpty($document->nodes);
     }
 
-    public function test_should_set_document_data()
+    public function test_set_document_data()
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_data.json');
 
@@ -46,7 +46,7 @@ class UnserializerTest extends TestCase
         );
     }
 
-    public function test_should_only_accept_block_nodes_for_document()
+    public function test_only_accept_block_nodes_for_document()
     {
         $this->markTestSkipped('TODO add better validation errors');
         $fixture = $this->loadFixture(__DIR__ . '/fixtures/document_with_inline_children.json');
@@ -55,7 +55,7 @@ class UnserializerTest extends TestCase
         Value::fromJSON($fixture);
     }
 
-    public function test_should_add_children_to_document()
+    public function test_add_children_to_document()
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_flat_children.json');
         $nodes = $document->nodes;
@@ -70,7 +70,7 @@ class UnserializerTest extends TestCase
         $this->assertEquals('list', $nodes[2]->type);
     }
 
-    public function test_should_nest_children()
+    public function test_nest_children()
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_nested_children.json');
         $children = $document->nodes;
@@ -81,7 +81,7 @@ class UnserializerTest extends TestCase
         $this->assertCount(2, $children[2]->nodes);
     }
 
-    public function test_should_load_document_with_leaves()
+    public function test_load_document_with_leaves()
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_text.json');
 
@@ -113,7 +113,7 @@ class UnserializerTest extends TestCase
         }
     }
 
-    public function test_should_set_node_data()
+    public function test_set_node_data()
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/nodes_with_data.json');
         $block = $document->nodes[0];
@@ -130,7 +130,7 @@ class UnserializerTest extends TestCase
         );
     }
 
-    public function test_should_set_mark_data()
+    public function test_set_mark_data()
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/mark_with_data.json");
         $leaf = $document->nodes[0]->nodes[0]->leaves[0];
@@ -146,7 +146,7 @@ class UnserializerTest extends TestCase
      * @param string $file
      * @param string $expected_error
      */
-    public function test_should_fail_deserializing_invalid_structure(string $file, string $expected_error)
+    public function test_fail_deserializing_invalid_structure(string $file, string $expected_error)
     {
         $this->markTestSkipped('TODO add better validation errors');
         $this->expectException(InvalidArgumentException::class);
@@ -155,7 +155,7 @@ class UnserializerTest extends TestCase
     }
 
     /**
-     * @see it_should_fail_deserializing_invalid_structure
+     * @see test_fail_deserializing_invalid_structure
      */
     public function invalid_documents_fixtures()
     {
