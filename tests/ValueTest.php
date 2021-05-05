@@ -18,13 +18,13 @@ class ValueTest extends TestCase
             "\n",
             array_map(
                 function (string $line): string {
-                    return preg_replace('/^(\s+)/', '$1$1', $line);
+                    return \Safe\preg_replace('/^(\s+)/', '$1$1', $line);
                 },
                 explode("\n", $json)
             )
         );
 
-        $this->assertEquals(trim($json), json_encode($value, JSON_PRETTY_PRINT));
+        $this->assertEquals(trim($json), \Safe\json_encode($value, JSON_PRETTY_PRINT));
     }
 
     public function fixtures(): array

@@ -10,7 +10,7 @@ trait JsonStringConvertible
      */
     public static function fromJSON(string $json)
     {
-        return static::jsonDeserialize(json_decode($json));
+        return static::jsonDeserialize(\Safe\json_decode($json));
     }
 
     /**
@@ -18,7 +18,7 @@ trait JsonStringConvertible
      */
     public function toJSON()
     {
-        return json_encode(static::jsonSerialize());
+        return \Safe\json_encode(static::jsonSerialize());
     }
 
     /**
