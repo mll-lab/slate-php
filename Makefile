@@ -1,5 +1,24 @@
-test: vendor
+.PHONY: it
+it: stan test normalize
+
+.PHONY: help
+help: ## Displays this list of targets with descriptions
+	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(firstword $(MAKEFILE_LIST)) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: setup
+setup: vendor ## Set up the project
+
+.PHONY: stan
+stan: ## Run static analysis
+	vendor/bin/phpstan
+
+.PHONY: test
+test: ## Run PHPUnit tests
 	vendor/bin/phpunit
 
-vendor:
+.PHONY: normalize
+normalize: ## Normalize composer.json
+	composer normalize
+
+vendor: composer.json ## Install dependencies through composer
 	composer install
