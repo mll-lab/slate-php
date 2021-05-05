@@ -56,9 +56,9 @@ class Inline extends TextContainingNode
 
     /**
      * @param \stdClass $object
-     * @return static
+     * @return self
      */
-    public static function jsonDeserialize(\stdClass $object)
+    public static function jsonDeserialize(\stdClass $object): self
     {
         return new self(
             $object->type,
