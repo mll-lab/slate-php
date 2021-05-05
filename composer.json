@@ -1,6 +1,5 @@
 {
-    "name": "prezly/slate-php",
-    "description": "PHP implementation of the Slate Rich Text Editor data model",
+    "name": "mll-lab/slate-php",
     "type": "library",
     "description": "PHP implementation of the [Slate Rich Text Editor](https://slatejs.org) data model",
     "license": "MIT",
@@ -8,6 +7,10 @@
         {
             "name": "Victor Stanciu",
             "email": "victor@prezly.com"
+        },
+        {
+            "name": "Benedikt Franke",
+            "email": "benedikt.franke@mll.com"
         }
     ],
     "require": {
