@@ -1,8 +1,8 @@
 {
     "name": "mll-lab/slate-php",
-    "type": "library",
     "description": "PHP implementation of the [Slate Rich Text Editor](https://slatejs.org) data model",
     "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Victor Stanciu",
@@ -16,12 +16,12 @@
     "require": {
         "php": "^7.4 || ^8",
         "ext-json": "*",
-        "thecodingmachine/safe": "^1"
+        "thecodingmachine/safe": "^1 || ^2"
     },
     "require-dev": {
         "dms/phpunit-arraysubset-asserts": "^0.3.0",
         "ergebnis/composer-normalize": "^2",
-        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan": "^1",
         "phpunit/phpunit": "^9",
         "thecodingmachine/phpstan-safe-rule": "^1"
     },
@@ -33,6 +33,11 @@
     "autoload-dev": {
         "psr-4": {
             "Prezly\\Slate\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
         }
     }
 }
