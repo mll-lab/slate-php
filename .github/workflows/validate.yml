@@ -63,7 +63,7 @@ jobs:
           extensions: mbstring
           php-version: "${{ matrix.php-version }}"
 
-      - run: composer remove mll-lab/rector-config
+      - run: composer remove --dev mll-lab/rector-config
 
       - if: matrix.dependencies == 'lowest'
         run: composer update --prefer-lowest --no-interaction --no-progress --no-suggest
