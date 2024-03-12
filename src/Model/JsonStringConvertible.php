@@ -14,9 +14,12 @@ trait JsonStringConvertible
         return static::jsonDeserialize($object);
     }
 
-    public function toJSON(): string
+    public function toJSON(int $flags = 0): string
     {
-        return \Safe\json_encode(static::jsonSerialize());
+        return \Safe\json_encode(
+            static::jsonSerialize(),
+            $flags
+        );
     }
 
     abstract public static function jsonDeserialize(\stdClass $object): self;

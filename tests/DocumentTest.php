@@ -8,7 +8,7 @@ final class DocumentTest extends TestCase
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_text.json');
 
-        $this->assertEquals(
+        $this->assertSame(
             "I'd like to introduce you to a very important person!",
             $document->text
         );

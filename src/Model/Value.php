@@ -15,10 +15,10 @@ class Value implements JsonConvertible
         $this->document = $document;
     }
 
-    public static function jsonDeserialize(\stdClass $value): self
+    public static function jsonDeserialize(\stdClass $object): self
     {
         return new self(
-            Document::jsonDeserialize($value->document)
+            Document::jsonDeserialize($object->document)
         );
     }
 
