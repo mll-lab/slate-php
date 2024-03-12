@@ -67,9 +67,9 @@ final class UnserializerTest extends TestCase
             $this->assertInstanceOf(Block::class, $node);
         }
 
-        $this->assertEquals('paragraph', $nodes[0]->type);
-        $this->assertEquals('blockquote', $nodes[1]->type);
-        $this->assertEquals('list', $nodes[2]->type);
+        $this->assertSame('paragraph', $nodes[0]->type);
+        $this->assertSame('blockquote', $nodes[1]->type);
+        $this->assertSame('list', $nodes[2]->type);
     }
 
     public function testNestChildren(): void
@@ -109,7 +109,7 @@ final class UnserializerTest extends TestCase
 
         foreach ($text->leaves as $i => $leaf) {
             $this->assertInstanceOf(Leaf::class, $leaf);
-            $this->assertEquals($expected_texts[$i], $leaf->text);
+            $this->assertSame($expected_texts[$i], $leaf->text);
         }
     }
 
@@ -122,8 +122,8 @@ final class UnserializerTest extends TestCase
             $block->data
         );
 
-        /** @var Inline $inline */
         $inline = $block->nodes[0];
+        assert($inline instanceof Inline);
         $this->assertEquals(
             (object) ['name' => 'John Doe', 'id' => 1234],
             $inline->data

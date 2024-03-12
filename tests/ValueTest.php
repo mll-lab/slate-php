@@ -5,7 +5,7 @@ namespace Prezly\Slate\Tests;
 final class ValueTest extends TestCase
 {
     /** @dataProvider fixtures */
-    public function testSerializeToJson(string $filePath): void
+    public function testSerializeToJSON(string $filePath): void
     {
         $json = $this->loadFixture($filePath);
         $value = $this->loadContentFromFixture($filePath);
@@ -18,7 +18,7 @@ final class ValueTest extends TestCase
             )
         );
 
-        $this->assertEquals(trim($json), \Safe\json_encode($value, JSON_PRETTY_PRINT));
+        $this->assertSame(trim($json), \Safe\json_encode($value, JSON_PRETTY_PRINT));
     }
 
     /** @return iterable<array{string}> */
