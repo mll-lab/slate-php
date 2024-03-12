@@ -9,6 +9,16 @@ See [GitHub releases](https://github.com/mll-lab/slate-php/releases).
 
 ## Unreleased
 
+## v7.0.0
+
+### Added
+
+- Allow passing through flags to `json_encode`
+
+### Changed
+
+- Add native types to all properties and methods
+
 ## v6.1.0
 
 ### Added
