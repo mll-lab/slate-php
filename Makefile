@@ -1,5 +1,5 @@
 .PHONY: it
-it: stan test normalize
+it: fix stan test ## Run the commonly used targets
 
 .PHONY: help
 help: ## Displays this list of targets with descriptions
@@ -7,6 +7,17 @@ help: ## Displays this list of targets with descriptions
 
 .PHONY: setup
 setup: vendor ## Set up the project
+
+.PHONY: fix
+fix: rector php-cs-fixer
+
+.PHONY: rector
+rector: vendor
+	vendor/bin/rector process
+
+.PHONY: php-cs-fixer
+php-cs-fixer:
+	vendor/bin/php-cs-fixer fix
 
 .PHONY: stan
 stan: ## Run static analysis
@@ -16,9 +27,6 @@ stan: ## Run static analysis
 test: ## Run PHPUnit tests
 	vendor/bin/phpunit
 
-.PHONY: normalize
-normalize: ## Normalize composer.json
-	composer normalize
-
 vendor: composer.json ## Install dependencies through composer
-	composer install
+	composer update
+	composer normalize

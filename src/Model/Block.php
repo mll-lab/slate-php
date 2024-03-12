@@ -1,25 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Model;
 
 class Block extends TextContainingNode
 {
-    const OBJECT = 'block';
+    public const OBJECT = 'block';
 
-    /** @var string */
-    public $type;
+    public string $type;
 
-    /** @var \stdClass */
-    public $data;
+    public \stdClass $data;
 
-    /** @var Block[]|Text[]|Inline[] */
-    public $nodes;
+    /** @var array<Block>|array<Text>|array<Inline> */
+    public array $nodes;
 
-    /**
-     * @param string $type
-     * @param Block[]|Text[]|Inline[] $nodes
-     * @param \stdClass $data
-     */
+    /** @param array<Block>|array<Text>|array<Inline> $nodes */
     public function __construct(string $type, ?array $nodes = null, ?\stdClass $data = null)
     {
         $this->type = $type;
@@ -31,9 +25,7 @@ class Block extends TextContainingNode
     {
         return array_reduce(
             $this->nodes,
-            function(string $text, TextContainingNode $node): string {
-                return $text . $node->text;
-            },
+            fn (string $text, TextContainingNode $node): string => $text . $node->text,
             ''
         );
     }
@@ -42,23 +34,19 @@ class Block extends TextContainingNode
     {
         return (object) [
             'object' => self::OBJECT,
-            'type'   => $this->type,
-            'data'   => $this->data,
-            'nodes'  => $this->nodes,
+            'type' => $this->type,
+            'data' => $this->data,
+            'nodes' => $this->nodes,
         ];
     }
 
-    /**
-     * @param \stdClass $object
-     * @return self
-     */
     public static function jsonDeserialize(\stdClass $object): self
     {
         return new self(
             $object->type,
             array_map(
-                function(\stdClass $node): TextContainingNode {
-                    switch($node->object){
+                function (\stdClass $node): TextContainingNode {
+                    switch ($node->object) {
                         case self::OBJECT:
                             return self::jsonDeserialize($node);
                         case Inline::OBJECT:
@@ -66,7 +54,7 @@ class Block extends TextContainingNode
                         case Text::OBJECT:
                             return Text::jsonDeserialize($node);
                         default:
-                            throw new \Exception("Found unknown node of kind $node->object when trying to deserialize a Block");
+                            throw new \Exception("Found unknown node of kind {$node->object} when trying to deserialize a Block");
                     }
                 },
                 $object->nodes

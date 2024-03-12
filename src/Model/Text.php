@@ -1,63 +1,44 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Model;
 
 class Text extends TextContainingNode
 {
-    const OBJECT = 'text';
+    public const OBJECT = 'text';
 
-    /** @var Leaf[] */
-    public $leaves = [];
+    /** @var array<Leaf> */
+    public array $leaves;
 
-    /**
-     * @param \Prezly\Slate\Model\Leaf[] $leaves
-     * @return void
-     */
+    /** @param array<Leaf> $leaves */
     public function __construct(array $leaves = [])
     {
         $this->leaves = $leaves;
     }
 
-    /**
-     * @return \stdClass
-     */
     public function jsonSerialize(): \stdClass
     {
         return (object) [
             'object' => self::OBJECT,
-            'leaves'  => $this->leaves
+            'leaves' => $this->leaves,
         ];
     }
 
-    /**
-     * @param \stdClass $object
-     * @return self
-     */
     public static function jsonDeserialize(\stdClass $object): self
     {
         return new self(
             array_map(
-                function(\stdClass $leaf): Leaf {
-                    return Leaf::jsonDeserialize($leaf);
-                },
+                fn (\stdClass $leaf): Leaf => Leaf::jsonDeserialize($leaf),
                 $object->leaves
             )
         );
     }
 
-    /**
-     * Concatenate all the descendant text nodes of this node.
-     *
-     * @return string
-     */
+    /** Concatenate all the descendant text nodes of this node. */
     protected function computeTextProperty(): string
     {
-
         return array_reduce(
             $this->leaves,
-            function(string $text, Leaf $leaf): string {
-                return $text . $leaf->text;
-            },
+            fn (string $text, Leaf $leaf): string => $text . $leaf->text,
             ''
         );
     }

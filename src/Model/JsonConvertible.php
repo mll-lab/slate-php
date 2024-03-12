@@ -1,17 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Model;
 
 interface JsonConvertible extends \JsonSerializable
 {
-    /**
-     * @param \stdClass $object
-     * @return static
-     */
-    public static function jsonDeserialize(\stdClass $object);
+    public static function jsonDeserialize(\stdClass $object): self;
 
-    /**
-     * @return \stdClass
-     */
     public function jsonSerialize(): \stdClass;
 }
