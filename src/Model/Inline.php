@@ -1,25 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Model;
 
 class Inline extends TextContainingNode
 {
-    const OBJECT = 'inline';
+    public const OBJECT = 'inline';
 
-    /** @var string */
-    public $type;
+    public string $type;
 
-    /** @var \stdClass */
-    public $data;
+    public \stdClass $data;
 
-    /** @var Inline[]|Text[] */
-    public $nodes = [];
+    /** @var array<Inline>|array<Text> */
+    public array $nodes = [];
 
-    /**
-     * @param string $type
-     * @param Text[]|Inline[] $nodes
-     * @param \stdClass $data
-     */
+    /** @param array<Text>|array<Inline> $nodes */
     public function __construct(string $type, ?array $nodes = null, ?\stdClass $data = null)
     {
         $this->type = $type;
@@ -27,50 +21,38 @@ class Inline extends TextContainingNode
         $this->data = $data ?? new \stdClass();
     }
 
-    /**
-     * @return string
-     */
     public function computeTextProperty(): string
     {
         return array_reduce(
             $this->nodes,
-            function(string $text, TextContainingNode $node): string {
-                return $text . $node->text;
-            },
+            fn (string $text, TextContainingNode $node): string => $text . $node->text,
             ''
         );
     }
 
-    /**
-     * @return \stdClass
-     */
     public function jsonSerialize(): \stdClass
     {
         return (object) [
             'object' => self::OBJECT,
-            'type'   => $this->type,
-            'data'   => $this->data,
-            'nodes'  => $this->nodes
+            'type' => $this->type,
+            'data' => $this->data,
+            'nodes' => $this->nodes,
         ];
     }
 
-    /**
-     * @param \stdClass $object
-     * @return self
-     */
     public static function jsonDeserialize(\stdClass $object): self
     {
         return new self(
             $object->type,
             array_map(
-                function(\stdClass $node): TextContainingNode {
-                    switch($node->object){
+                function (\stdClass $node): TextContainingNode {
+                    switch ($node->object) {
                         case self::OBJECT:
                             return self::jsonDeserialize($node);
                         case Text::OBJECT:
                             return Text::jsonDeserialize($node);
                         default:
-                            throw new \Exception("Found unknown node of kind $node->object when trying to deserialize a Inline");
+                            throw new \Exception("Found unknown node of kind {$node->object} when trying to deserialize a Inline");
                     }
                 },
                 $object->nodes

@@ -1,25 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Tests;
 
-class ValueTest extends TestCase
+final class ValueTest extends TestCase
 {
-    /**
-     * @dataProvider fixtures
-     *
-     * @param string $file_path
-     */
-    public function test_serialize_to_json(string $file_path)
+    /** @dataProvider fixtures */
+    public function testSerializeToJson(string $filePath): void
     {
-        $json = $this->loadFixture($file_path);
-        $value = $this->loadContentFromFixture($file_path);
+        $json = $this->loadFixture($filePath);
+        $value = $this->loadContentFromFixture($filePath);
 
         $json = implode(
             "\n",
             array_map(
-                function (string $line): string {
-                    return \Safe\preg_replace('/^(\s+)/', '$1$1', $line);
-                },
+                fn (string $line): string => \Safe\preg_replace('/^(\s+)/', '$1$1', $line),
                 explode("\n", $json)
             )
         );
@@ -27,10 +21,9 @@ class ValueTest extends TestCase
         $this->assertEquals(trim($json), \Safe\json_encode($value, JSON_PRETTY_PRINT));
     }
 
-    public function fixtures(): array
+    /** @return iterable<array{string}> */
+    public function fixtures(): iterable
     {
-        return [
-            'document_with_text.json' => [__DIR__ . '/fixtures/document_with_text.json'],
-        ];
+        yield 'document_with_text.json' => [__DIR__ . '/fixtures/document_with_text.json'];
     }
 }

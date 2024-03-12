@@ -1,10 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Tests;
 
-class DocumentTest extends TestCase
+final class DocumentTest extends TestCase
 {
-    public function test_get_concatenated_plain_text_content_of_inner_nodes()
+    public function testGetConcatenatedPlainTextContentOfInnerNodes(): void
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_text.json');
 

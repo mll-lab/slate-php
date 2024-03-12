@@ -1,65 +1,46 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Model;
 
 class Document extends TextContainingNode
 {
-    const OBJECT = 'document';
+    public const OBJECT = 'document';
 
-    /** @var Block[] */
-    public $nodes;
+    /** @var array<Block> */
+    public array $nodes;
 
-    /** @var \stdClass */
-    public $data;
+    public \stdClass $data;
 
-    /**
-     * @param \Prezly\Slate\Model\Block[] $nodes
-     * @param \stdClass|null $data
-     * @return void
-     */
+    /** @param array<Block> $nodes */
     public function __construct(array $nodes = [], ?\stdClass $data = null)
     {
         $this->nodes = $nodes;
         $this->data = $data ?? new \stdClass();
     }
 
-    /**
-     * @return string
-     */
     protected function computeTextProperty(): string
     {
         return array_reduce(
             $this->nodes,
-            function(string $text, Block $block): string {
-                return $text . $block->text;
-            },
+            fn (string $text, Block $block): string => $text . $block->text,
             ''
         );
     }
 
-    /**
-     * @return \stdClass
-     */
     public function jsonSerialize(): \stdClass
     {
         return (object) [
             'object' => self::OBJECT,
-            'data'   => $this->data,
-            'nodes'  => $this->nodes,
+            'data' => $this->data,
+            'nodes' => $this->nodes,
         ];
     }
 
-    /**
-     * @param \stdClass $object
-     * @return self
-     */
     public static function jsonDeserialize(\stdClass $object): self
     {
         return new self(
             array_map(
-                function(\stdClass $block): Block {
-                    return Block::jsonDeserialize($block);
-                },
+                fn (\stdClass $block): Block => Block::jsonDeserialize($block),
                 $object->nodes
             ),
             $object->data

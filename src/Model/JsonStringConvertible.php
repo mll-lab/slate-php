@@ -1,34 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Model;
 
 trait JsonStringConvertible
 {
-    /**
-     * @param string $json
-     * @return static
-     */
-    public static function fromJSON(string $json)
+    public static function fromJSON(string $json): self
     {
-        return static::jsonDeserialize(\Safe\json_decode($json));
+        $object = \Safe\json_decode($json);
+        if (! $object instanceof \stdClass) {
+            throw new \InvalidArgumentException("Expected JSON object, got: {$json}.");
+        }
+
+        return static::jsonDeserialize($object);
     }
 
-    /**
-     * @return string
-     */
-    public function toJSON()
+    public function toJSON(): string
     {
         return \Safe\json_encode(static::jsonSerialize());
     }
 
-    /**
-     * @param \stdClass $object
-     * @return static
-     */
-    abstract public static function jsonDeserialize(\stdClass $object);
+    abstract public static function jsonDeserialize(\stdClass $object): self;
 
-    /**
-     * @return \stdClass
-     */
     abstract public function jsonSerialize(): \stdClass;
 }

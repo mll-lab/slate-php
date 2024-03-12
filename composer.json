@@ -19,9 +19,13 @@
         "thecodingmachine/safe": "^1 || ^2"
     },
     "require-dev": {
-        "dms/phpunit-arraysubset-asserts": "^0.3.0",
+        "dms/phpunit-arraysubset-asserts": "^0.5",
         "ergebnis/composer-normalize": "^2",
+        "mll-lab/php-cs-fixer-config": "^5",
+        "mll-lab/rector-config": "^2",
+        "phpstan/extension-installer": "^1",
         "phpstan/phpstan": "^1",
+        "phpstan/phpstan-phpunit": "^1",
         "phpunit/phpunit": "^9",
         "thecodingmachine/phpstan-safe-rule": "^1"
     },
@@ -37,7 +41,8 @@
     },
     "config": {
         "allow-plugins": {
-            "ergebnis/composer-normalize": true
+            "ergebnis/composer-normalize": true,
+            "phpstan/extension-installer": true
         }
     }
 }

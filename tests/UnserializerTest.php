@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Prezly\Slate\Tests;
 
@@ -8,9 +8,7 @@ use Prezly\Slate\Model\Leaf;
 use Prezly\Slate\Model\Text;
 use Prezly\Slate\Model\Value;
 
-use InvalidArgumentException;
-
-class UnserializerTest extends TestCase
+final class UnserializerTest extends TestCase
 {
     /**
      * The top level node of the Slate model is the Value. Any JSON that doesn't
@@ -19,24 +17,26 @@ class UnserializerTest extends TestCase
      * @see https://docs.slatejs.org/slate-core/value
      * @see https://docs.slatejs.org/slate-core/document
      */
-    public function test_expect_top_level_document()
+    public function testExpectTopLevelDocument(): void
     {
         $this->markTestSkipped('TODO add better validation errors');
-        $this->expectException(InvalidArgumentException::class);
+
+        // @phpstan-ignore-next-line unreachable
+        $this->expectException(\InvalidArgumentException::class);
         Value::fromJSON('{}');
     }
 
     /**
      * Since the Slate model always has a top-level node (the Value), the result of unserialization
-     * should always be a single Value instance
+     * should always be a single Value instance.
      */
-    public function test_return_document_node()
+    public function testReturnDocumentNode(): void
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/empty_document.json');
         $this->assertEmpty($document->nodes);
     }
 
-    public function test_set_document_data()
+    public function testSetDocumentData(): void
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_data.json');
 
@@ -46,16 +46,18 @@ class UnserializerTest extends TestCase
         );
     }
 
-    public function test_only_accept_block_nodes_for_document()
+    public function testOnlyAcceptBlockNodesForDocument(): void
     {
         $this->markTestSkipped('TODO add better validation errors');
+
+        // @phpstan-ignore-next-line unreachable
         $fixture = $this->loadFixture(__DIR__ . '/fixtures/document_with_inline_children.json');
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
 
         Value::fromJSON($fixture);
     }
 
-    public function test_add_children_to_document()
+    public function testAddChildrenToDocument(): void
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_flat_children.json');
         $nodes = $document->nodes;
@@ -70,7 +72,7 @@ class UnserializerTest extends TestCase
         $this->assertEquals('list', $nodes[2]->type);
     }
 
-    public function test_nest_children()
+    public function testNestChildren(): void
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_nested_children.json');
         $children = $document->nodes;
@@ -81,21 +83,19 @@ class UnserializerTest extends TestCase
         $this->assertCount(2, $children[2]->nodes);
     }
 
-    public function test_load_document_with_leaves()
+    public function testLoadDocumentWithLeaves(): void
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/document_with_text.json');
 
         $this->assertCount(1, $document->nodes);
         $block = $document->nodes[0];
 
-        /** @var Block $block */
-        $this->assertInstanceOf(Block::class, $block);
-        $this->assertEquals('paragraph', $block->type);
+        assert($block instanceof Block);
+        $this->assertSame('paragraph', $block->type);
         $this->assertCount(1, $block->nodes);
 
-        /** @var Text $text */
         $text = $block->nodes[0];
-        $this->assertInstanceOf(Text::class, $text);
+        assert($text instanceof Text);
         $this->assertCount(6, $text->leaves);
 
         $expected_texts = [
@@ -113,7 +113,7 @@ class UnserializerTest extends TestCase
         }
     }
 
-    public function test_set_node_data()
+    public function testSetNodeData(): void
     {
         $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/nodes_with_data.json');
         $block = $document->nodes[0];
@@ -130,44 +130,41 @@ class UnserializerTest extends TestCase
         );
     }
 
-    public function test_set_mark_data()
+    public function testSetMarkData(): void
     {
-        $document = $this->loadDocumentFromFixture(__DIR__ . "/fixtures/mark_with_data.json");
-        $leaf = $document->nodes[0]->nodes[0]->leaves[0];
+        $document = $this->loadDocumentFromFixture(__DIR__ . '/fixtures/mark_with_data.json');
+
+        $text = $document->nodes[0]->nodes[0];
+        assert($text instanceof Text);
+
+        $leaf = $text->leaves[0];
         $this->assertEquals(
-            (object) ["href" => "/foo"],
+            (object) ['href' => '/foo'],
             $leaf->marks[0]->data
         );
     }
 
-    /**
-     * @dataProvider invalid_documents_fixtures
-     *
-     * @param string $file
-     * @param string $expected_error
-     */
-    public function test_fail_deserializing_invalid_structure(string $file, string $expected_error)
+    /** @dataProvider invalidDocuments */
+    public function testFailDeserializingInvalidStructure(string $file, string $expectedError): void
     {
         $this->markTestSkipped('TODO add better validation errors');
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage($expected_error);
+
+        // @phpstan-ignore-next-line unreachable
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedError);
         $this->loadDocumentFromFixture($file);
     }
 
-    /**
-     * @see test_fail_deserializing_invalid_structure
-     */
-    public function invalid_documents_fixtures()
+    /** @return iterable<array{string, string}> */
+    public function invalidDocuments(): iterable
     {
-        return [
-            [__DIR__ . '/fixtures/invalid_document_01.json', 'Unexpected JSON value given: integer. An object is expected to construct Value.'],
-            [__DIR__ . '/fixtures/invalid_document_02.json', 'Unexpected JSON value given: string. An object is expected to construct Value.'],
-            [__DIR__ . '/fixtures/invalid_document_03.json', 'Invalid JSON structure given to construct Value. It should have "object" property.'],
-            [__DIR__ . '/fixtures/invalid_document_04.json', 'Invalid JSON structure given to construct Value. It should have "object" property set to "value".'],
-            [__DIR__ . '/fixtures/invalid_document_05.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'],
-            [__DIR__ . '/fixtures/invalid_document_06.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'],
-            [__DIR__ . '/fixtures/invalid_document_07.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'],
-            [__DIR__ . '/fixtures/invalid_document_08_invalid_leaf_object.json', 'Invalid JSON structure given to construct Leaf. It should have "object" property set to "leaf".'],
-        ];
+        yield [__DIR__ . '/fixtures/invalid_document_01.json', 'Unexpected JSON value given: integer. An object is expected to construct Value.'];
+        yield [__DIR__ . '/fixtures/invalid_document_02.json', 'Unexpected JSON value given: string. An object is expected to construct Value.'];
+        yield [__DIR__ . '/fixtures/invalid_document_03.json', 'Invalid JSON structure given to construct Value. It should have "object" property.'];
+        yield [__DIR__ . '/fixtures/invalid_document_04.json', 'Invalid JSON structure given to construct Value. It should have "object" property set to "value".'];
+        yield [__DIR__ . '/fixtures/invalid_document_05.json', 'Unexpected JSON structure given for Value. A Value should have "document" property.'];
+        yield [__DIR__ . '/fixtures/invalid_document_06.json', 'Unexpected JSON structure given for Value. The "document" property should be object.'];
+        yield [__DIR__ . '/fixtures/invalid_document_07.json', 'Invalid JSON structure given to construct Document. It should have "object" property set to "document".'];
+        yield [__DIR__ . '/fixtures/invalid_document_08_invalid_leaf_object.json', 'Invalid JSON structure given to construct Leaf. It should have "object" property set to "leaf".'];
     }
 }
