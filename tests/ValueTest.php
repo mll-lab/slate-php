@@ -2,7 +2,7 @@
 
 namespace Prezly\Slate\Tests;
 
-class ValueTest extends TestCase
+final class ValueTest extends TestCase
 {
     /** @dataProvider fixtures */
     public function testSerializeToJson(string $filePath): void
