@@ -9,6 +9,12 @@ See [GitHub releases](https://github.com/mll-lab/slate-php/releases).
 
 ## Unreleased
 
+## v7.1.0
+
+### Changed
+
+- Allow `thecodingmachine/safe` ^3 https://github.com/mll-lab/slate-php/pull/5
+
 ## v7.0.0
 
 ### Added
