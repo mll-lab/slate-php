@@ -16,7 +16,7 @@
     "require": {
         "php": "^7.4 || ^8",
         "ext-json": "*",
-        "thecodingmachine/safe": "^1 || ^2"
+        "thecodingmachine/safe": "^1 || ^2 || ^3"
     },
     "require-dev": {
         "dms/phpunit-arraysubset-asserts": "^0.5",
